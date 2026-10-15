@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-/* A microscope reticle over a hair shaft in cross-section: what HairGPT does
+/* A microscope reticle over a hair shaft in cross-section: what TrichoRAG does
    (measure a hair) drawn the way an instrument would draw it. */
 export function ReticleMark({ className }: { className?: string }) {
   return (
@@ -16,11 +16,11 @@ export function ReticleMark({ className }: { className?: string }) {
 
 export function Wordmark({ className }: { className?: string }) {
   return (
-    <Link href="/" className={cn("group flex items-center gap-2.5", className)} aria-label="HairGPT home">
+    <Link href="/" className={cn("group flex items-center gap-2.5", className)} aria-label="TrichoRAG home">
       <ReticleMark className="h-7 w-7 text-ink transition-transform duration-500 ease-out group-hover:rotate-90" />
       <span className="flex items-baseline gap-[3px]">
-        <span className="font-display text-[1.5rem] leading-none tracking-[-0.02em] text-ink">Hair</span>
-        <span className="font-mono text-[0.68rem] font-medium uppercase tracking-[0.16em] text-accent">GPT</span>
+        <span className="font-display text-[1.5rem] leading-none tracking-[-0.02em] text-ink">Tricho</span>
+        <span className="font-mono text-[0.68rem] font-medium uppercase tracking-[0.16em] text-accent">RAG</span>
       </span>
     </Link>
   );

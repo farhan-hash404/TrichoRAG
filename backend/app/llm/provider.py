@@ -8,7 +8,7 @@ from app.llm.base import Explanation, ExplanationContext, LLMProvider
 from app.llm.prompts import REFERRAL_INSTRUCTION, SYSTEM_PROMPT
 from app.llm.safety_filter import scrub_output
 
-log = logging.getLogger("hairgpt.llm")
+log = logging.getLogger("trichorag.llm")
 
 _BASE_LIMITATIONS = [
     "This is an image-based observation, not a medical diagnosis.",

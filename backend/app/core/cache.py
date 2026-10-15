@@ -17,7 +17,7 @@ from typing import Any
 
 from app.core.config import settings
 
-log = logging.getLogger("hairgpt.cache")
+log = logging.getLogger("trichorag.cache")
 
 _client = None
 _client_checked = False

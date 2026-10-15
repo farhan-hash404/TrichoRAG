@@ -13,9 +13,9 @@ from dataclasses import dataclass
 
 import chromadb
 
-log = logging.getLogger("hairgpt.rag.vectorstore")
+log = logging.getLogger("trichorag.rag.vectorstore")
 
-COLLECTION = "hairgpt_evidence"
+COLLECTION = "trichorag_evidence"
 
 
 @dataclass

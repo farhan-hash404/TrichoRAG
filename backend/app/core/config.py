@@ -16,14 +16,14 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     # App
-    hairgpt_env: str = "dev"
+    trichorag_env: str = "dev"
     secret_key: str = DEV_SECRET
     access_token_ttl_min: int = 30
     refresh_token_ttl_days: int = 14
     cors_origins: str = "http://localhost:3000"
 
     # Database
-    database_url: str = "sqlite:///./hairgpt.db"
+    database_url: str = "sqlite:///./trichorag.db"
 
     # Storage
     storage_backend: str = "local"
@@ -109,7 +109,7 @@ class Settings(BaseSettings):
 
     @property
     def is_prod(self) -> bool:
-        return self.hairgpt_env.lower() in {"prod", "production"}
+        return self.trichorag_env.lower() in {"prod", "production"}
 
     def check_production_safety(self) -> None:
         """Refuse to run in production with the published dev secret: it signs

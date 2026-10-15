@@ -1,6 +1,6 @@
-# HairGPT — System Architecture
+# TrichoRAG — System Architecture
 
-> **Clinical stance:** HairGPT is a *wellness and tracking* tool that produces **image-based observations and AI inferences**, not medical diagnoses. It never prescribes prescription medication, never fabricates measurements, and always distinguishes *visual observation → AI inference → medical evidence → clinician diagnosis*. A deterministic safety layer can override the LLM at any time.
+> **Clinical stance:** TrichoRAG is a *wellness and tracking* tool that produces **image-based observations and AI inferences**, not medical diagnoses. It never prescribes prescription medication, never fabricates measurements, and always distinguishes *visual observation → AI inference → medical evidence → clinician diagnosis*. A deterministic safety layer can override the LLM at any time.
 
 ## 1. Core principle
 
@@ -10,7 +10,7 @@ Analyze → Explain → Track → Recommend → Escalate
 
 Two subsystems share one platform, one pipeline, one safety layer:
 
-- **HairGPT** — hair & scalp analysis (front hairline, temples, top, crown, sides, back)
+- **TrichoRAG** — hair & scalp analysis (front hairline, temples, top, crown, sides, back)
 - **SkinGPT** — face & skin analysis (front, left, right)
 
 ## 2. Request pipeline (canonical flow)

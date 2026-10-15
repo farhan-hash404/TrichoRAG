@@ -1,4 +1,4 @@
-# HairGPT — Medical RAG Architecture
+# TrichoRAG — Medical RAG Architecture
 
 **Goal:** every important medical claim is traceable to a high-quality source. The LLM may only assert medical guidance that is grounded in retrieved evidence; ungrounded claims are stripped.
 

@@ -1,5 +1,5 @@
 /**
- * HairGPT Mobile Bridge Client Helper
+ * TrichoRAG Mobile Bridge Client Helper
  * 
  * Provides typed functions to communicate with the React Native mobile wrapper.
  * Safely degrades to no-op or standard Web APIs when running in standard web browsers.
@@ -75,6 +75,6 @@ export function listenToNativeMessage(callback: (data: unknown) => void) {
     callback(customEvent.detail);
   };
 
-  window.addEventListener('HairGptNativeMessage', handler);
-  return () => window.removeEventListener('HairGptNativeMessage', handler);
+  window.addEventListener('TrichoRagNativeMessage', handler);
+  return () => window.removeEventListener('TrichoRagNativeMessage', handler);
 }

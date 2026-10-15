@@ -7,7 +7,7 @@ from app.cv.manifest import ModelSpec
 from app.cv.torch.loader import load_checkpoint, preprocess, require_torch
 from app.cv.types import ConfidenceScore, ImageInput, SegmentationResult
 
-log = logging.getLogger("hairgpt.cv.torch")
+log = logging.getLogger("trichorag.cv.torch")
 
 
 class TorchSegmenter(Segmenter):

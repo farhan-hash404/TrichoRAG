@@ -260,7 +260,7 @@ function History() {
 
       <p className="caption mt-6 flex max-w-[80ch] gap-2.5">
         <Stethoscope className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-        Everything here is self-reported and recorded as such. HairGPT does not diagnose: this history decides when to
+        Everything here is self-reported and recorded as such. TrichoRAG does not diagnose: this history decides when to
         suggest seeing a clinician, and goes into your doctor report so the conversation starts further along.
       </p>
     </div>

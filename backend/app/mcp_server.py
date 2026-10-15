@@ -1,4 +1,4 @@
-"""HairGPT's evidence tools over the Model Context Protocol.
+"""TrichoRAG's evidence tools over the Model Context Protocol.
 
 Any MCP client (Claude Desktop, Claude Code, an IDE agent) can search the
 licensed hair-health corpus and ask cited, machine-verified questions, through
@@ -8,7 +8,7 @@ tool is read-only; none can see users, scans or photos.
 Run over stdio:
     python -m app.mcp_server
 Register with Claude Code (from backend/):
-    claude mcp add hairgpt -- .venv/Scripts/python.exe -m app.mcp_server
+    claude mcp add trichorag -- .venv/Scripts/python.exe -m app.mcp_server
 """
 
 from __future__ import annotations
@@ -32,7 +32,7 @@ READ_ONLY = ToolAnnotations(readOnlyHint=True, destructiveHint=False, idempotent
 MAX_QUERY = 600
 
 SAFETY_POLICY = """\
-HairGPT evidence tools: usage policy
+TrichoRAG evidence tools: usage policy
 
 The corpus is general health information from the NHS (OGL v3), MedlinePlus,
 NIAMS and DailyMed (US public domain) and open-access reviews (CC BY / CC0).
@@ -48,13 +48,13 @@ NIAMS and DailyMed (US public domain) and open-access reviews (CC BY / CC0).
 """
 
 mcp = MCPServer(
-    name="hairgpt-evidence",
-    title="HairGPT evidence",
+    name="trichorag-evidence",
+    title="TrichoRAG evidence",
     version="1.0.0",
     instructions=(
         "Tools for grounded hair and scalp health information. Prefer ask_hair_question for a "
         "verified, cited answer; use search_hair_evidence for raw passages. Read the "
-        "hairgpt://safety-policy resource before answering people: no diagnoses, no doses."
+        "trichorag://safety-policy resource before answering people: no diagnoses, no doses."
     ),
 )
 
@@ -156,7 +156,7 @@ def list_sources() -> dict:
     return {"count": len(documents), "documents": documents}
 
 
-@mcp.resource("hairgpt://safety-policy", name="safety-policy", mime_type="text/plain")
+@mcp.resource("trichorag://safety-policy", name="safety-policy", mime_type="text/plain")
 def safety_policy() -> str:
     """What these tools must never be used to do."""
     return SAFETY_POLICY

@@ -1,4 +1,4 @@
-# HairGPT — Frontend Wireframe & UX
+# TrichoRAG — Frontend Wireframe & UX
 
 **Feel:** Apple Health + Google Lens + a modern dermatologist dashboard + a calm AI assistant. Premium, clean, minimal, medical — **not** a chatbot, **not** a hospital admin system. Generous whitespace, one accent color, rounded cards, subtle depth, confidence shown as rings/meters, evidence always one tap away.
 
@@ -46,7 +46,7 @@ A hero **Hair Health** card, then a metric grid — each is a tappable card with
 [ New scan ]   [ Compare ]   [ Doctor report ]
 ```
 
-Persistent footer disclaimer: *"HairGPT provides image-based observations, not a medical diagnosis."*
+Persistent footer disclaimer: *"TrichoRAG provides image-based observations, not a medical diagnosis."*
 
 ## Guided capture (Google-Lens feel)
 - Full-bleed camera, an on-screen **silhouette guide** per view, and a live coaching chip: *"Hold steady"*, *"Too dark"*, *"Move closer"*, *"Part hair to show scalp"*.

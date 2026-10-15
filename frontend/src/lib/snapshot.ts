@@ -2,7 +2,7 @@
  * Recorded-demo mode.
  *
  * The public demo is a static site with no server to sleep or pay for. It ships
- * a snapshot of a real run of the HairGPT API (backend/scripts/record_snapshot.py)
+ * a snapshot of a real run of the TrichoRAG API (backend/scripts/record_snapshot.py)
  * and answers the site's own API calls from it. Nothing is invented: every
  * response was produced by the real pipeline. Dates are shifted so the record
  * always looks current, and a visitor's edits (shedding logs, treatments,

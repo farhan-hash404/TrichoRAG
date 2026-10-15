@@ -43,7 +43,7 @@ from app.rag.bm25 import tokenize, tokenize_query
 from app.rag.retriever import is_supported, search_chunks
 from app.rag.sanitize import split_sentences
 
-log = logging.getLogger("hairgpt.agents.qa")
+log = logging.getLogger("trichorag.agents.qa")
 
 DISCLAIMER = "General information from the cited sources, not medical advice or a diagnosis."
 ABSTAIN_MESSAGE = (
@@ -52,7 +52,7 @@ ABSTAIN_MESSAGE = (
     "their side effects, scalp conditions, and when to see a clinician."
 )
 
-QA_SYSTEM = """You are HairGPT's evidence assistant. You answer questions about hair and scalp
+QA_SYSTEM = """You are TrichoRAG's evidence assistant. You answer questions about hair and scalp
 health using ONLY the numbered sources provided.
 
 Rules — these are not negotiable:
@@ -186,7 +186,7 @@ def _best_sentence(text: str, query_tokens: set[str]) -> str | None:
         if not 6 <= len(words) <= 70:
             continue
         # Verbatim quoting prevents fabrication, not policy violations: a
-        # review may state a dose, and HairGPT never repeats one.
+        # review may state a dose, and TrichoRAG never repeats one.
         if policy_violations(sentence):
             continue
         tokens = set(tokenize(sentence))
@@ -245,7 +245,7 @@ def finalize_node(state: QAState) -> QAState:
         return {"answer": "\n\n".join([*notes, WITHHELD_MESSAGE]), "mode": "withheld",
                 "trace": _log(state, "finalize:withheld")}
     if mode in ("llm", "extractive"):
-        # Guardrail notes (e.g. "HairGPT does not give doses") come FIRST, so the
+        # Guardrail notes (e.g. "TrichoRAG does not give doses") come FIRST, so the
         # boundary is read before the information.
         answer = "\n\n".join([*notes, answer, DISCLAIMER])
     return {"answer": answer, "trace": _log(state, "finalize")}

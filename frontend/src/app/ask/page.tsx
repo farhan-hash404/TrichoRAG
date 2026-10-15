@@ -159,7 +159,7 @@ const VERDICT: Record<QAResult["mode"], { badge: React.ComponentProps<typeof Bad
   abstain: {
     badge: "neutral",
     label: "not in the sources",
-    note: "Nothing in the corpus answers this, so HairGPT says so instead of guessing.",
+    note: "Nothing in the corpus answers this, so TrichoRAG says so instead of guessing.",
   },
   withheld: {
     badge: "alert",

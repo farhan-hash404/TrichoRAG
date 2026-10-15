@@ -1,6 +1,6 @@
-# hairgpt
+# trichorag
 
-HairGPT: hair and scalp observations with stated confidence and cited evidence.
+TrichoRAG: hair and scalp observations with stated confidence and cited evidence.
 
 ## Getting Started
 

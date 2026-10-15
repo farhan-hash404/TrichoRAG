@@ -5,7 +5,7 @@ are therefore PINNED to the originator brand (Rogaine, Kenvue) rather than taken
 from the top of a search, so the corpus is authoritative and reproducible.
 
 Sections are selected by their official LOINC section codes. The Directions
-section (dosing) is excluded by code: HairGPT never states a dose.
+section (dosing) is excluded by code: TrichoRAG never states a dose.
 """
 
 from __future__ import annotations
@@ -19,7 +19,7 @@ from app.rag.sanitize import normalize
 from app.rag.scraper.html_extract import Section
 from app.rag.scraper.http import PoliteClient
 
-log = logging.getLogger("hairgpt.scraper.dailymed")
+log = logging.getLogger("trichorag.scraper.dailymed")
 
 API = "https://dailymed.nlm.nih.gov/dailymed/services/v2"
 NS = {"v3": "urn:hl7-org:v3"}

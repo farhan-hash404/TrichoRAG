@@ -51,7 +51,7 @@ _CLAIM_SIGNALS = re.compile(
 # carry no clinical claim and need no citation.
 _EXEMPT = re.compile(
     r"\b(gp|doctor|clinician|pharmacist|dermatologist|prescriber|healthcare professional)\b|"
-    r"\bhairgpt\b|\bnot (a )?diagnos|\bi (could not|couldn't|can't|cannot|don't|do not)\b|"
+    r"\btrichorag\b|\bnot (a )?diagnos|\bi (could not|couldn't|can't|cannot|don't|do not)\b|"
     r"\bsources? (do not|don't|does not|doesn't)\b|general information",
     re.IGNORECASE,
 )

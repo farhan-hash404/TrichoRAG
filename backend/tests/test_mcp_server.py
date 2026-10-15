@@ -38,7 +38,7 @@ def test_ask_is_cited_and_verified(client):
 
 def test_ask_keeps_the_dose_guardrail(client):
     r = _call("ask_hair_question", {"question": "How many mg of finasteride should I take?"})
-    assert r["answer"].startswith("HairGPT does not give doses")
+    assert r["answer"].startswith("TrichoRAG does not give doses")
     assert "dosing" not in policy_violations(r["answer"])
 
 
@@ -47,5 +47,5 @@ def test_sources_and_safety_policy(client):
 
     sources = _call("list_sources", {})
     assert sources["count"] == len(sources["documents"]) > 0
-    policy = "".join(part.content for part in asyncio.run(mcp.read_resource("hairgpt://safety-policy")))
+    policy = "".join(part.content for part in asyncio.run(mcp.read_resource("trichorag://safety-policy")))
     assert "No doses" in policy and "not diagnosis" in policy

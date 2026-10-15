@@ -202,7 +202,7 @@ def log_to_mlflow(metrics: dict, meta: dict) -> None:
     import mlflow
 
     mlflow.set_tracking_uri(f"sqlite:///{(ROOT / 'mlflow.db').as_posix()}")
-    mlflow.set_experiment("hairgpt-redteam")
+    mlflow.set_experiment("trichorag-redteam")
     with mlflow.start_run(run_name=meta["label"]):
         mlflow.log_params({k: v for k, v in meta.items() if k not in ("label", "stem")})
         mlflow.log_metrics({k: float(v) for k, v in metrics.items()})

@@ -116,7 +116,7 @@ function MoreMenu({ pathname }: { pathname: string }) {
           role="menu"
           className="panel absolute right-0 top-full z-50 mt-2 w-64 overflow-hidden p-1 shadow-[0_18px_40px_-18px_hsl(var(--ink)/0.35)] animate-rise"
         >
-          <p className="label px-3 pb-1.5 pt-2.5">Also in HairGPT</p>
+          <p className="label px-3 pb-1.5 pt-2.5">Also in TrichoRAG</p>
           {MORE_NAV.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
@@ -146,7 +146,7 @@ function RecordingBanner() {
     <div className="border-b border-rule bg-marker/30 text-[hsl(30_12%_10%)] print:hidden">
       <div className="container flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-1.5 text-xs">
         <p>
-          <span className="font-semibold">Recorded demo.</span> Every screen replays real responses from the HairGPT
+          <span className="font-semibold">Recorded demo.</span> Every screen replays real responses from the TrichoRAG
           API; anything you enter stays in this browser.
         </p>
         <p className="flex gap-4 font-medium">
@@ -169,7 +169,7 @@ function Colophon() {
         <div>
           <p className="font-display text-xl italic leading-snug text-ink">Observations, not diagnoses.</p>
           <p className="mt-3 max-w-[58ch] text-[0.8125rem] leading-relaxed text-ink-soft">
-            HairGPT measures what a photograph can show and says how sure it is. It never diagnoses and never
+            TrichoRAG measures what a photograph can show and says how sure it is. It never diagnoses and never
             prescribes; for anything that worries you, see a GP or a dermatologist.
           </p>
         </div>

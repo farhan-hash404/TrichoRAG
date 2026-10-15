@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 from app.rag.sanitize import normalize
 from app.rag.sources import Publisher
 
-log = logging.getLogger("hairgpt.scraper.extract")
+log = logging.getLogger("trichorag.scraper.extract")
 
 _HEADINGS = {"h2": 2, "h3": 3, "h4": 4}
 _TEXT_BLOCKS = {"p", "li", "dd", "dt", "blockquote"}

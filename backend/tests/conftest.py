@@ -11,7 +11,7 @@ from pathlib import Path
 # maths) fast and offline. Retrieval QUALITY is measured by the benchmark in
 # scripts/eval_rag.py against the full corpus and real embeddings.
 _FIXTURES = Path(__file__).parent / "fixtures"
-_SCRATCH = tempfile.mkdtemp(prefix="hairgpt-tests-")
+_SCRATCH = tempfile.mkdtemp(prefix="trichorag-tests-")
 os.environ.update({
     # Never the developer's database, even for code that opens its own session.
     "DATABASE_URL": f"sqlite:///{_SCRATCH}/unit.db",
@@ -49,7 +49,7 @@ def client(monkeypatch):
     tmpdir = tempfile.mkdtemp()
     monkeypatch.setenv("DATABASE_URL", f"sqlite:///{tmpdir}/test.db")
     monkeypatch.setenv("STORAGE_LOCAL_DIR", f"{tmpdir}/storage")
-    monkeypatch.setenv("HAIRGPT_ENV", "dev")
+    monkeypatch.setenv("TRICHORAG_ENV", "dev")
 
     import app.core.config as config
 

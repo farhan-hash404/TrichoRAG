@@ -37,7 +37,7 @@ from app.rag.hybrid import RetrievedChunk, diversify, grade_prior, reciprocal_ra
 from app.rag.sources import ALLOWED_SOURCES
 from app.rag.vectorstore import ChromaVectorStore
 
-log = logging.getLogger("hairgpt.rag.index")
+log = logging.getLogger("trichorag.rag.index")
 
 CANDIDATES = 40  # per retriever, before fusion
 # The evidence-grade prior did not help on the benchmark (RRF Hit@1 0.830

@@ -116,7 +116,7 @@ def main() -> None:
     import mlflow
 
     mlflow.set_tracking_uri(f"sqlite:///{(ROOT / 'mlflow.db').as_posix()}")
-    mlflow.set_experiment("hairgpt-rag-fusion-ablation")
+    mlflow.set_experiment("trichorag-rag-fusion-ablation")
     for row in rows:
         with mlflow.start_run(run_name=f"{row['config']} prior={row['grade_prior']}"):
             mlflow.log_params({"config": row["config"], "grade_prior": row["grade_prior"], "questions": len(cached)})

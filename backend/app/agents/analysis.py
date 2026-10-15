@@ -56,7 +56,7 @@ from app.recommendations.engine import RecommendationOut, build_recommendations
 from app.safety.engine import SafetyVerdict, evaluate as safety_evaluate
 from app.services.storage import storage
 
-log = logging.getLogger("hairgpt.agents.analysis")
+log = logging.getLogger("trichorag.agents.analysis")
 
 LOW_CONFIDENCE = 0.4
 HAIR_SEG_TARGETS = ["hair", "scalp"]

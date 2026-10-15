@@ -72,7 +72,7 @@ def rule_facial_swelling(obs, ctx) -> RuleResult:
 
 
 # ---------------------------------------------------------------------------
-# Hair (HairGPT) red flags — force referral.
+# Hair (TrichoRAG) red flags — force referral.
 # ---------------------------------------------------------------------------
 
 def rule_scarring_alopecia(obs, ctx) -> RuleResult:

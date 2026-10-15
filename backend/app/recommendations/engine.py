@@ -29,7 +29,7 @@ from app.rag.index import get_rag_index
 from app.rag.retriever import EvidenceRef, _to_ref, default_reranker, is_supported
 from app.safety.engine import SafetyVerdict
 
-log = logging.getLogger("hairgpt.recommendations")
+log = logging.getLogger("trichorag.recommendations")
 
 # Prescription-only agents. They may ONLY ever appear inside clinician-discussion
 # points ("ask whether X is appropriate") — never as an instruction, never dosed.
@@ -127,7 +127,7 @@ RULES: list[Rule] = [
         "Ask about treatments for patterned thinning",
         "Finasteride and minoxidil are the main treatments for patterned hair loss. Finasteride is "
         "prescription-only and not for women; minoxidil is available without a prescription. A pharmacist "
-        "or GP can advise whether either suits you. HairGPT does not prescribe or dose medicines.",
+        "or GP can advise whether either suits you. TrichoRAG does not prescribe or dose medicines.",
         "Finasteride and minoxidil are the main treatments for male pattern baldness; minoxidil for female pattern",
         when=lambda ctx: ctx.patterned_thinning,
         requires_clinician=True,

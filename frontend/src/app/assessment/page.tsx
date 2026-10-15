@@ -301,7 +301,7 @@ function Assessment() {
             <StepPanel
               badge="Step 4 of 5"
               title="Clinical Safety Check"
-              intro="HairGPT employs safety heuristics to detect red-flag symptoms. If any critical signs are present, the system prioritizes doctor escalation over routine tracking."
+              intro="TrichoRAG employs safety heuristics to detect red-flag symptoms. If any critical signs are present, the system prioritizes doctor escalation over routine tracking."
             >
               <SymptomCheck
                 domain="hair"

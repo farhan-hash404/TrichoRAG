@@ -5,7 +5,7 @@ name: Deploy API to Hugging Face Spaces (PRO)
 # started by hand. The public demo does not need it: it is a recorded snapshot
 # on Vercel (see docs/DEPLOY.md).
 # Setup (repository Settings -> Secrets and variables -> Actions):
-#   variable HF_SPACE   e.g. your-hf-username/hairgpt-api
+#   variable HF_SPACE   e.g. your-hf-username/trichorag-api
 #   secret   HF_TOKEN   a Hugging Face access token with "write" permission
 #   secret   GEMINI_API_KEY   optional; without it answers are verbatim, cited quotes
 
@@ -33,7 +33,7 @@ jobs:
           git archive HEAD backend | tar -x --strip-components=1 -C space
           {
             echo "---"
-            echo "title: HairGPT API"
+            echo "title: TrichoRAG API"
             echo "emoji: 🔬"
             echo "colorFrom: green"
             echo "colorTo: yellow"
@@ -43,7 +43,7 @@ jobs:
             echo "short_description: Evidence-grounded hair & scalp observations (demo API)"
             echo "---"
             echo
-            echo "Backend of [HairGPT](https://github.com/${{ github.repository }}). Built from commit \`$(git rev-parse --short HEAD)\`."
+            echo "Backend of [TrichoRAG](https://github.com/${{ github.repository }}). Built from commit \`$(git rev-parse --short HEAD)\`."
             echo "Observations, not diagnoses. Health check: \`/health\` · API docs: \`/docs\`."
           } > space/README.md
 
@@ -76,7 +76,7 @@ jobs:
           if not token:
               fail("HF_TOKEN missing", "Add a Hugging Face Write token as the repository secret HF_TOKEN.")
           if not re.fullmatch(r"[A-Za-z0-9][\w.-]*/[A-Za-z0-9][\w.-]*", space):
-              fail("HF_SPACE malformed", f"HF_SPACE must be your-hf-username/space-name (e.g. alice/hairgpt-api), got '{space}'.")
+              fail("HF_SPACE malformed", f"HF_SPACE must be your-hf-username/space-name (e.g. alice/trichorag-api), got '{space}'.")
 
           api = HfApi(token=token)
           me = hf("HF_TOKEN rejected", api.whoami)

@@ -9,7 +9,7 @@ from app.cv.imageio import DecodedImage
 from app.models.scan import ScanImage, ScanSession
 from app.services.storage import storage
 
-log = logging.getLogger("hairgpt.framing")
+log = logging.getLogger("trichorag.framing")
 
 
 def find_reference_session(db: Session, user_id, domain: str, exclude_session_id=None) -> ScanSession | None:

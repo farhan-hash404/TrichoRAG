@@ -1,7 +1,7 @@
 """Webhooks for workflow automation (n8n).
 
-n8n owns scheduling and delivery (email, Slack); HairGPT owns the data. The
-workflow in ``automation/n8n/hairgpt-workflows.json`` calls these endpoints on
+n8n owns scheduling and delivery (email, Slack); TrichoRAG owns the data. The
+workflow in ``automation/n8n/trichorag-workflows.json`` calls these endpoints on
 a timer. They are authenticated with a shared secret rather than a user token,
 compared in constant time, and disabled entirely when no secret is set.
 """
@@ -19,11 +19,11 @@ from app.db.session import get_db
 router = APIRouter(prefix="/automation", tags=["automation (n8n)"])
 
 
-def require_webhook_secret(x_hairgpt_webhook_secret: str | None = Header(default=None)) -> None:
+def require_webhook_secret(x_trichorag_webhook_secret: str | None = Header(default=None)) -> None:
     expected = settings.automation_webhook_secret
     if not expected:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "automation webhooks are disabled")
-    if not x_hairgpt_webhook_secret or not hmac.compare_digest(x_hairgpt_webhook_secret, expected):
+    if not x_trichorag_webhook_secret or not hmac.compare_digest(x_trichorag_webhook_secret, expected):
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, "invalid webhook secret")
 
 

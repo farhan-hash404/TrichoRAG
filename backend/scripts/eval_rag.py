@@ -145,7 +145,7 @@ def log_to_mlflow(results: list[dict], index) -> None:
     import mlflow
 
     mlflow.set_tracking_uri(f"sqlite:///{(ROOT / 'mlflow.db').as_posix()}")
-    mlflow.set_experiment("hairgpt-rag-retrieval")
+    mlflow.set_experiment("trichorag-rag-retrieval")
     for r in results:
         with mlflow.start_run(run_name=r["label"]):
             mlflow.log_params({

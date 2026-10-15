@@ -7,7 +7,7 @@ from app.cv.manifest import ModelSpec
 from app.cv.torch.loader import load_checkpoint, preprocess, require_torch
 from app.cv.types import ConfidenceScore, ImageInput, Observation
 
-log = logging.getLogger("hairgpt.cv.torch")
+log = logging.getLogger("trichorag.cv.torch")
 
 # Attributes that are inferences about appearance rather than direct readings.
 _INFERRED = {"pigmentation", "fine_lines", "under_eye", "acne_like_lesion_count"}

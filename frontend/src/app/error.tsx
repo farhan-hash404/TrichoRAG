@@ -14,7 +14,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("[HairGPT Client Error]:", error);
+    console.error("[TrichoRAG Client Error]:", error);
   }, [error]);
 
   return (

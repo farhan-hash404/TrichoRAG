@@ -17,7 +17,7 @@ from functools import lru_cache
 
 from app.core.config import settings
 
-log = logging.getLogger("hairgpt.rag.embeddings")
+log = logging.getLogger("trichorag.rag.embeddings")
 
 
 class EmbeddingProvider(ABC):

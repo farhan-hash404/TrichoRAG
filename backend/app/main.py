@@ -25,7 +25,7 @@ from app.db.session import SessionLocal, init_db
 from app.rag.ingest import ensure_evidence
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
-log = logging.getLogger("hairgpt")
+log = logging.getLogger("trichorag")
 
 
 def _warm_caches() -> None:
@@ -62,7 +62,7 @@ async def lifespan(app: FastAPI):
 
         threading.Thread(target=_warm_caches, name="warm-caches", daemon=True).start()
     log.info(
-        "HairGPT %s started | CV_BACKEND=%s LLM=%s EMB=%s DB=%s",
+        "TrichoRAG %s started | CV_BACKEND=%s LLM=%s EMB=%s DB=%s",
         __version__, settings.cv_backend, settings.llm_provider,
         settings.embedding_provider, settings.database_url.split(":")[0],
     )
@@ -70,7 +70,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="HairGPT API",
+    title="TrichoRAG API",
     version=__version__,
     description=(
         "Multimodal hair/scalp and skin analysis. Provides image-based observations "

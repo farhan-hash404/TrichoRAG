@@ -48,7 +48,7 @@ def test_webhooks_require_the_shared_secret(client, monkeypatch):
 
     monkeypatch.setattr(automation.settings, "automation_webhook_secret", "s3cret")
     assert client.post("/api/v1/automation/reminders").status_code == 401
-    ok = client.post("/api/v1/automation/reminders", headers={"X-HairGPT-Webhook-Secret": "s3cret"})
+    ok = client.post("/api/v1/automation/reminders", headers={"X-TrichoRAG-Webhook-Secret": "s3cret"})
     assert ok.status_code == 200 and "reminders" in ok.json()
 
 
@@ -78,5 +78,5 @@ def test_due_reminders_selects_overdue_scans_and_missed_adherence():
     assert ("old@example.com", "scan_due") in kinds
     assert ("new@example.com", "scan_due") not in kinds
     assert ("new@example.com", "adherence_log") in kinds
-    # Minimal data only: nothing clinical leaves HairGPT.
+    # Minimal data only: nothing clinical leaves TrichoRAG.
     assert all(set(r) <= {"email", "name", "kind", "days_since_last_scan", "treatment"} for r in items)

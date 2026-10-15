@@ -23,9 +23,9 @@ from urllib.robotparser import RobotFileParser
 
 import httpx
 
-log = logging.getLogger("hairgpt.scraper")
+log = logging.getLogger("trichorag.scraper")
 
-USER_AGENT = "HairGPT-corpus-builder/1.0 (educational research project; respects robots.txt)"
+USER_AGENT = "TrichoRAG-corpus-builder/1.0 (educational research project; respects robots.txt)"
 
 
 class RobotsDisallowed(RuntimeError):

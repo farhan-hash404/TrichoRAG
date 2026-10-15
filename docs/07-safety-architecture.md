@@ -1,4 +1,4 @@
-# HairGPT — Safety Architecture
+# TrichoRAG — Safety Architecture
 
 The safety layer is **deterministic** and sits *above* the LLM. It can hard-override any downstream output. It runs on structured observations (never on the LLM's free text), so it cannot be talked out of a referral by prompt content.
 
@@ -18,7 +18,7 @@ Pure functions over observations. Any single high-severity flag forces `refer`.
 - facial swelling / suspected severe allergic reaction
 - signs consistent with a severe/urgent presentation
 
-**Hair (HairGPT) — force `refer`:**
+**Hair (TrichoRAG) — force `refer`:**
 - scarring-alopecia-like signals (scalp scarring/loss of follicular openings appearance)
 - pustules/boggy scalp/infection-like appearance
 - sudden patchy loss appearance (possible alopecia areata) → clinician

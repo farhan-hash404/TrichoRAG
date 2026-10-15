@@ -2,7 +2,7 @@
 
 ## Design: the annotated clinical atlas
 
-HairGPT measures, then cites, so the UI borrows from a dermatology atlas (serif
+TrichoRAG measures, then cites, so the UI borrows from a dermatology atlas (serif
 plates, figure captions, numbered references) and a lab instrument (mono
 readouts, ruler ticks, crop marks). Keep new screens in this language:
 

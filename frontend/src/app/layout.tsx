@@ -31,14 +31,14 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HairGPT",
+  title: "TrichoRAG",
   description:
     "Image-based hair and scalp observations with stated confidence, cited evidence, and clinician escalation. Not a medical diagnosis.",
 };
 
 /* Applies a saved light/dark choice before first paint, so the page never
    flashes the wrong theme. Without a saved choice the system setting rules. */
-const THEME_BOOT = `try{var t=localStorage.getItem("hairgpt-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+const THEME_BOOT = `try{var t=localStorage.getItem("trichorag-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

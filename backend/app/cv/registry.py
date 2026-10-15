@@ -20,7 +20,7 @@ from app.cv.mock.ocr import MockOCRExtractor
 from app.cv.mock.quality import MockImageQualityGate
 from app.cv.mock.segmenter import MockSegmenter
 
-log = logging.getLogger("hairgpt.cv")
+log = logging.getLogger("trichorag.cv")
 
 _MOCK = {
     "quality": MockImageQualityGate,

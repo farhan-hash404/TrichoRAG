@@ -47,7 +47,7 @@ function Treatments() {
             What you&apos;ve decided, <span className="marker">tracked</span>.
           </>
         }
-        dek="Record what you and your clinician have agreed. HairGPT never prescribes; it keeps the log and helps you prepare for the conversation."
+        dek="Record what you and your clinician have agreed. TrichoRAG never prescribes; it keeps the log and helps you prepare for the conversation."
         actions={
           <Button onClick={() => setAdding((a) => !a)} variant={adding ? "outline" : "default"}>
             {adding ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
@@ -129,7 +129,7 @@ function Treatments() {
       )}
 
       <p className="caption mt-8 max-w-[80ch] border-l-2 border-ink pl-3">
-        If a treatment is prescription-only, it must come from a qualified clinician. HairGPT will never tell you to
+        If a treatment is prescription-only, it must come from a qualified clinician. TrichoRAG will never tell you to
         start, stop, or change a prescription medication or its dose.
       </p>
     </div>

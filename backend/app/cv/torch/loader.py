@@ -5,7 +5,7 @@ from pathlib import Path
 
 from app.cv.manifest import ModelSpec
 
-log = logging.getLogger("hairgpt.cv.torch")
+log = logging.getLogger("trichorag.cv.torch")
 
 
 class CheckpointUnavailable(RuntimeError):

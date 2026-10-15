@@ -1,10 +1,10 @@
-# HairGPT API, packaged for Hugging Face Spaces (Docker SDK, free CPU tier) or
+# TrichoRAG API, packaged for Hugging Face Spaces (Docker SDK, free CPU tier) or
 # any container host. The evidence database, search index and both ONNX models
 # are baked in at build time; on start the container only seeds the demo
 # account and serves.
 #
-#   docker build -t hairgpt-api backend
-#   docker run -p 7860:7860 -e SECRET_KEY=$(python -c "import secrets;print(secrets.token_urlsafe(48))") hairgpt-api
+#   docker build -t trichorag-api backend
+#   docker run -p 7860:7860 -e SECRET_KEY=$(python -c "import secrets;print(secrets.token_urlsafe(48))") trichorag-api
 FROM python:3.13-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -26,9 +26,9 @@ RUN pip install --user -r requirements.txt
 
 COPY --chown=user . .
 
-ENV HAIRGPT_ENV=prod \
+ENV TRICHORAG_ENV=prod \
     DEMO_MODE=true \
-    DATABASE_URL=sqlite:////home/user/app/data/hairgpt.db \
+    DATABASE_URL=sqlite:////home/user/app/data/trichorag.db \
     STORAGE_LOCAL_DIR=/home/user/app/storage \
     CORPUS_FILE=/home/user/app/data/corpus/documents.jsonl \
     CHROMA_DIR=/home/user/app/data/chroma \

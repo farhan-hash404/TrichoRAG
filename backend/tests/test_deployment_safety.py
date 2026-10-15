@@ -9,11 +9,11 @@ from tests.conftest import authenticate
 
 def test_production_refuses_the_published_dev_secret():
     with pytest.raises(RuntimeError, match="SECRET_KEY"):
-        Settings(hairgpt_env="prod", secret_key=DEV_SECRET).check_production_safety()
+        Settings(trichorag_env="prod", secret_key=DEV_SECRET).check_production_safety()
     with pytest.raises(RuntimeError):
-        Settings(hairgpt_env="prod", secret_key="too-short").check_production_safety()
-    Settings(hairgpt_env="prod", secret_key="x" * 48).check_production_safety()  # fine
-    Settings(hairgpt_env="dev", secret_key=DEV_SECRET).check_production_safety()  # dev is fine
+        Settings(trichorag_env="prod", secret_key="too-short").check_production_safety()
+    Settings(trichorag_env="prod", secret_key="x" * 48).check_production_safety()  # fine
+    Settings(trichorag_env="dev", secret_key=DEV_SECRET).check_production_safety()  # dev is fine
 
 
 def test_shared_demo_account_cannot_be_deleted(client, monkeypatch):

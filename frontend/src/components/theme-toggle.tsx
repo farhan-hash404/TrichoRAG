@@ -5,7 +5,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const STORAGE_KEY = "hairgpt-theme";
+const STORAGE_KEY = "trichorag-theme";
 type Theme = "light" | "dark";
 
 function effectiveTheme(): Theme {

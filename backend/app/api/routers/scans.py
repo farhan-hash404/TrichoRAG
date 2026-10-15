@@ -56,7 +56,7 @@ from app.services.storage import make_storage_key, storage
 router = APIRouter(prefix="/scans", tags=["scans"])
 
 _DISCLAIMERS = [
-    "HairGPT provides image-based observations, not a medical diagnosis.",
+    "TrichoRAG provides image-based observations, not a medical diagnosis.",
 ]
 _MOCK_DISCLAIMER = "Some results were produced by mock inference and are NOT medically validated."
 _UNVALIDATED_DISCLAIMER = (

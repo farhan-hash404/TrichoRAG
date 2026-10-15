@@ -56,7 +56,7 @@ function Settings() {
     } else {
       const res = await fetch("/api/v1/account/export", {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem("hairgpt.access")}` },
+        headers: { Authorization: `Bearer ${localStorage.getItem("trichorag.access")}` },
       });
       data = await res.json();
     }
@@ -64,7 +64,7 @@ function Settings() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "hairgpt-export.json";
+    a.download = "trichorag-export.json";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -74,7 +74,7 @@ function Settings() {
     setDeleteError(null);
     const res = await fetch("/api/v1/account", {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${localStorage.getItem("hairgpt.access")}` },
+      headers: { Authorization: `Bearer ${localStorage.getItem("trichorag.access")}` },
     });
     // Only sign out once the server confirms; a refusal (e.g. the shared demo
     // account) must not look like a deletion.

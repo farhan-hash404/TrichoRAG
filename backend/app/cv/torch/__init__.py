@@ -23,7 +23,7 @@ import logging
 from app.cv.manifest import load_manifest
 from app.cv.torch.loader import CheckpointUnavailable
 
-log = logging.getLogger("hairgpt.cv.torch")
+log = logging.getLogger("trichorag.cv.torch")
 
 _BUILDERS = {
     "segmenter": ("app.cv.torch.segmenter", "TorchSegmenter"),

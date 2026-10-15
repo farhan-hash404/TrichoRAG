@@ -1,7 +1,7 @@
 # Deploying the public demo (free, no card)
 
 The public demo is the real website in **recorded-demo mode**, hosted free on Vercel. It ships a snapshot
-of a real run of the HairGPT API and answers the site's own API calls from it, so there is no server to
+of a real run of the TrichoRAG API and answers the site's own API calls from it, so there is no server to
 pay for, sleep or wake. Reviewers who want the live system open it in GitHub Codespaces with one click.
 
 | What | Where | Cost |
@@ -66,11 +66,11 @@ website opens on port 3000. Free GitHub accounts include monthly Codespaces hour
 ## The API as a container (any host)
 
 ```bash
-docker build -t hairgpt-api backend
+docker build -t trichorag-api backend
 ```
 
 ```bash
-docker run -p 7860:7860 -e SECRET_KEY=change-me-to-a-long-random-string-of-48-characters hairgpt-api
+docker run -p 7860:7860 -e SECRET_KEY=change-me-to-a-long-random-string-of-48-characters trichorag-api
 ```
 
 The image bakes in the evidence index and both models, re-seeds a fresh demo record on every start,

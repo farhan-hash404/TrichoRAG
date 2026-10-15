@@ -1,4 +1,4 @@
-/** Typed client for the HairGPT API. Tokens live in memory + localStorage.
+/** Typed client for the TrichoRAG API. Tokens live in memory + localStorage.
  *  In recorded-demo mode every call is answered from the snapshot instead. */
 
 import { SNAPSHOT_MODE, SnapshotError, snapshotRequest } from "@/lib/snapshot";
@@ -99,8 +99,8 @@ export type Analysis = {
   disclaimers: string[];
 };
 
-const TOKEN_KEY = "hairgpt.access";
-const REFRESH_KEY = "hairgpt.refresh";
+const TOKEN_KEY = "trichorag.access";
+const REFRESH_KEY = "trichorag.refresh";
 let memoryToken: string | null = null;
 let memoryRefresh: string | null = null;
 

@@ -24,7 +24,7 @@ import numpy as np
 from app.rag.chunking import contextual_text
 from app.rag.hybrid import RetrievedChunk
 
-log = logging.getLogger("hairgpt.rag.rerank")
+log = logging.getLogger("trichorag.rag.rerank")
 
 CROSS_ENCODER_REPO = "Xenova/ms-marco-MiniLM-L-6-v2"
 MAX_TOKENS = 320

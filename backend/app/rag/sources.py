@@ -1,4 +1,4 @@
-"""Registry of the medical sources HairGPT is allowed to learn from.
+"""Registry of the medical sources TrichoRAG is allowed to learn from.
 
 Two rules decide what goes in here:
 
@@ -82,7 +82,7 @@ class Publisher:
     # CSS selector for the main article content on this publisher's pages.
     content_selector: str
     # Section headings to drop: navigation, references, and — deliberately —
-    # dosing instructions. HairGPT never states a dose, so the corpus should not
+    # dosing instructions. TrichoRAG never states a dose, so the corpus should not
     # hand the language model one to repeat.
     drop_headings: tuple[str, ...] = field(default_factory=tuple)
 

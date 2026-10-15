@@ -23,7 +23,7 @@ from pydantic import BaseModel
 
 from app.core.config import settings
 
-log = logging.getLogger("hairgpt.llm")
+log = logging.getLogger("trichorag.llm")
 
 T = TypeVar("T", bound=BaseModel)
 

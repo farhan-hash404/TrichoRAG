@@ -1,4 +1,4 @@
-"""HairGPT backend package.
+"""TrichoRAG backend package.
 
 Multimodal hair/scalp and skin analysis platform. This package deliberately
 separates deterministic CV/observation/safety logic from the LLM, which is used

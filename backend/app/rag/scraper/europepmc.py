@@ -23,7 +23,7 @@ from app.rag.scraper.html_extract import Section
 from app.rag.scraper.http import PoliteClient, RobotsDisallowed
 from app.rag.sources import EUROPEPMC_ALLOWED_LICENSES, LiteratureTopic
 
-log = logging.getLogger("hairgpt.scraper.europepmc")
+log = logging.getLogger("trichorag.scraper.europepmc")
 
 API = "https://www.ebi.ac.uk/europepmc/webservices/rest"
 

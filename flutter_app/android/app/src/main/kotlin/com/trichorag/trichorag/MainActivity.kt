@@ -1,4 +1,4 @@
-package com.hairgpt.hairgpt
+package com.trichorag.trichorag
 
 import io.flutter.embedding.android.FlutterActivity
 

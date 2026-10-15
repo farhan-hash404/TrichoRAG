@@ -1,11 +1,11 @@
 {
-    "name": "hairgpt",
-    "short_name": "hairgpt",
+    "name": "trichorag",
+    "short_name": "trichorag",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "HairGPT: hair and scalp observations with stated confidence and cited evidence.",
+    "description": "TrichoRAG: hair and scalp observations with stated confidence and cited evidence.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

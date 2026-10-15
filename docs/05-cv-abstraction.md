@@ -1,4 +1,4 @@
-# HairGPT — CV Abstraction Layer
+# TrichoRAG — CV Abstraction Layer
 
 **Goal:** no computer-vision architecture is hard-coded. Every capability is an interface (ABC) with (a) a **mock** implementation that ships by default and (b) a **real** implementation slot that loads a trained checkpoint. Swapping models is a config change, not a code change. Mock outputs are always flagged `is_mock=True` and `validated=False`.
 

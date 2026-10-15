@@ -1,4 +1,4 @@
-# HairGPT — Implementation Roadmap
+# TrichoRAG — Implementation Roadmap
 
 ## Guiding rule
 Build the **MVP first**. Use honest, clearly-labeled mock CV inference where a trained model is unavailable; keep mock and real inference strictly separated; never present a mock as validated. Verify architecture against requirements before each stage.

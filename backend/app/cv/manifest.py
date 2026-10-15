@@ -5,7 +5,7 @@ import logging
 from dataclasses import dataclass, field
 from pathlib import Path
 
-log = logging.getLogger("hairgpt.cv.manifest")
+log = logging.getLogger("trichorag.cv.manifest")
 
 # Subgroups that MUST be reported separately before any model is considered
 # validated. Aggregate accuracy is not an acceptable substitute — a model can

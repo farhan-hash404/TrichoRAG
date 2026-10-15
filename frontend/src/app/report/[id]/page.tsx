@@ -133,7 +133,7 @@ function Report() {
             <div className="flex items-center gap-3">
               <ReticleMark className="h-9 w-9 text-ink" />
               <div>
-                <p className="font-display text-2xl leading-none">HairGPT</p>
+                <p className="font-display text-2xl leading-none">TrichoRAG</p>
                 <p className="label mt-1.5">Clinician-facing summary · {titleize(r.domain)}</p>
               </div>
             </div>

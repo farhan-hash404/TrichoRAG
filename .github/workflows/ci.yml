@@ -58,11 +58,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build the image (bakes the evidence index and models)
-        run: docker build -t hairgpt-api backend
+        run: docker build -t trichorag-api backend
       - name: Start it the way the host will
         run: |
           docker run -d --name api -p 7860:7860 \
-            -e SECRET_KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(48))')" hairgpt-api
+            -e SECRET_KEY="$(python3 -c 'import secrets; print(secrets.token_urlsafe(48))')" trichorag-api
       - name: Smoke test
         run: |
           for i in $(seq 1 90); do

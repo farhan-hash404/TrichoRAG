@@ -8,7 +8,7 @@ from app.safety.rules import RuleResult, run_rules
 
 REFERRAL_MESSAGE = (
     "Based on the image observations, we recommend evaluation by a qualified "
-    "clinician (e.g. a dermatologist) rather than self-treatment. HairGPT provides "
+    "clinician (e.g. a dermatologist) rather than self-treatment. TrichoRAG provides "
     "image-based observations only and cannot diagnose."
 )
 

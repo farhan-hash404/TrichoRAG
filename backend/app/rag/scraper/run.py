@@ -1,4 +1,4 @@
-"""Build the HairGPT evidence corpus.
+"""Build the TrichoRAG evidence corpus.
 
     python -m app.rag.scraper.run                    # everything, using the cache
     python -m app.rag.scraper.run --pmc-per-topic 4  # more literature per topic
@@ -33,7 +33,7 @@ from app.rag.sources import (
     WEB_PAGES,
 )
 
-log = logging.getLogger("hairgpt.scraper")
+log = logging.getLogger("trichorag.scraper")
 
 BACKEND_ROOT = Path(__file__).resolve().parents[3]
 CORPUS_DIR = BACKEND_ROOT / "data" / "corpus"

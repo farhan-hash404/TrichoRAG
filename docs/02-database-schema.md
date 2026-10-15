@@ -1,4 +1,4 @@
-# HairGPT — Database Schema
+# TrichoRAG — Database Schema
 
 PostgreSQL 15+ with the `vector` (pgvector) and `pgcrypto` extensions. All timestamps are `timestamptz` (UTC). All primary keys are UUID v4. Soft-delete via `deleted_at`; hard-delete honored by the erasure job.
 

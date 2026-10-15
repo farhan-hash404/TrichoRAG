@@ -20,9 +20,9 @@ from sqlalchemy import func, select
 
 from app.core.config import settings
 
-log = logging.getLogger("hairgpt.worker")
+log = logging.getLogger("trichorag.worker")
 
-celery_app = Celery("hairgpt", broker=settings.redis_url or "memory://", backend=settings.redis_url or None)
+celery_app = Celery("trichorag", broker=settings.redis_url or "memory://", backend=settings.redis_url or None)
 celery_app.conf.update(
     task_always_eager=not settings.redis_url,
     task_eager_propagates=True,
@@ -33,8 +33,8 @@ celery_app.conf.update(
     worker_prefetch_multiplier=1,  # analyses are heavy; don't hoard them
     timezone="UTC",
     beat_schedule={
-        "refresh-evidence-corpus": {"task": "hairgpt.refresh_corpus", "schedule": crontab(day_of_week="sun", hour=3)},
-        "compute-reminders": {"task": "hairgpt.compute_reminders", "schedule": crontab(hour=8, minute=0)},
+        "refresh-evidence-corpus": {"task": "trichorag.refresh_corpus", "schedule": crontab(day_of_week="sun", hour=3)},
+        "compute-reminders": {"task": "trichorag.compute_reminders", "schedule": crontab(hour=8, minute=0)},
     },
 )
 
@@ -47,7 +47,7 @@ def _session():
     return db_session.SessionLocal()
 
 
-@celery_app.task(name="hairgpt.analyze_scan", bind=True, max_retries=2, default_retry_delay=10)
+@celery_app.task(name="trichorag.analyze_scan", bind=True, max_retries=2, default_retry_delay=10)
 def analyze_scan(self, session_id: str, safety_ctx: dict | None = None) -> dict:
     """Run the LangGraph analysis in the background. Clients poll
     GET /scans/{id}/result, which answers 202 until the analysis is persisted."""
@@ -69,7 +69,7 @@ def analyze_scan(self, session_id: str, safety_ctx: dict | None = None) -> dict:
         db.close()
 
 
-@celery_app.task(name="hairgpt.refresh_corpus")
+@celery_app.task(name="trichorag.refresh_corpus")
 def refresh_corpus(pmc_per_topic: int = 3) -> dict:
     """Re-scrape the allowlisted sources and reconcile the index incrementally.
 
@@ -124,7 +124,7 @@ def due_reminders(db, today: date | None = None) -> list[dict]:
     return reminders
 
 
-@celery_app.task(name="hairgpt.compute_reminders")
+@celery_app.task(name="trichorag.compute_reminders")
 def compute_reminders() -> dict:
     db = _session()
     try:

@@ -1,4 +1,4 @@
-# HairGPT — API Contracts
+# TrichoRAG — API Contracts
 
 Base URL: `/api/v1`. Auth: `Authorization: Bearer <access_jwt>`. All bodies JSON unless noted. Errors follow `{ "error": { "code", "message", "details?" } }`. Every response that contains an AI conclusion also contains an `explanation` object.
 

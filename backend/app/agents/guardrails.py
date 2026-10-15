@@ -134,7 +134,7 @@ class GuardDecision:
 EMERGENCY_MESSAGE = (
     "This sounds like it could be an emergency. Please call your local emergency number now "
     "(999 in the UK, 911 in the US, 112 in the EU) or go to the nearest emergency department. "
-    "HairGPT cannot help with emergencies."
+    "TrichoRAG cannot help with emergencies."
 )
 CRISIS_MESSAGE = (
     "It sounds like you're going through something really hard. You don't have to face it alone: "
@@ -165,7 +165,7 @@ def check_input(question: str) -> GuardDecision:
     if _is_dosing_request(text):
         decision.flags.append("dosing_request")
         decision.notes.append(
-            "HairGPT does not give doses. Follow the product label, or ask a pharmacist or the "
+            "TrichoRAG does not give doses. Follow the product label, or ask a pharmacist or the "
             "prescriber what is right for you."
         )
     if _DIAGNOSIS.search(text):
@@ -177,7 +177,7 @@ def check_input(question: str) -> GuardDecision:
     if _is_treatment_decision(text):
         decision.flags.append("treatment_decision")
         decision.notes.append(
-            "HairGPT can't make treatment decisions for you. Whether to start, stop or switch a "
+            "TrichoRAG can't make treatment decisions for you. Whether to start, stop or switch a "
             "treatment is for you to decide with a GP, pharmacist or dermatologist who knows your "
             "health history; prescription-only medicines should only come from a prescriber."
         )
