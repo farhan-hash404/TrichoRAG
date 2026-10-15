@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ShieldCheck } from "lucide-react";
 import { api, clearTokens, getToken } from "@/lib/api";
+import { useServerStatus } from "@/lib/server-status";
 import { Button } from "@/components/ui/button";
 import { ReticleMark } from "@/components/wordmark";
 
@@ -90,6 +91,37 @@ function Field({ label, hint, children }: { label: string; hint?: string; childr
   );
 }
 
+/* Says what is happening when the free-tier API is asleep, instead of letting
+   the first sign-in time out with a vague error. */
+function ServerNotice() {
+  const { state, demo } = useServerStatus();
+  if (state === "waking") {
+    return (
+      <p role="status" className="mb-4 flex items-start gap-2.5 border-l-2 border-ink bg-surface px-3.5 py-2.5 text-sm">
+        <ReticleMark className="mt-0.5 h-4 w-4 shrink-0 animate-spin text-ink [animation-duration:2.4s]" />
+        <span>
+          Waking the demo server. Free hosting sleeps when idle, so this can take up to a minute.
+        </span>
+      </p>
+    );
+  }
+  if (state === "unreachable") {
+    return (
+      <p role="alert" className="mb-4 border-l-2 border-alert bg-alert-wash px-3.5 py-2.5 text-sm text-alert">
+        The demo server isn&apos;t responding. Please try again in a few minutes.
+      </p>
+    );
+  }
+  if (state === "ready" && demo) {
+    return (
+      <p className="caption mb-4 border-l-2 border-rule-strong px-3.5 py-1">
+        Public demo · accounts and photos are wiped whenever the server restarts.
+      </p>
+    );
+  }
+  return null;
+}
+
 function AuthForm({ onDone }: { onDone: () => void }) {
   const [mode, setMode] = React.useState<"login" | "register">("login");
   const [email, setEmail] = React.useState("");
@@ -161,6 +193,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
       </section>
 
       <section className="animate-rise [animation-delay:120ms] lg:col-span-5">
+        <ServerNotice />
         <div className="crop-marks">
           <div className="graph-paper border border-rule bg-surface p-6 sm:p-8">
             <p className="label">{mode === "login" ? "Sign in" : "New record"}</p>
