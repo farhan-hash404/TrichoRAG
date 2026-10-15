@@ -1,10 +1,10 @@
-﻿"""Seed a demo account with synthetic scans, treatments and adherence.
+"""Seed a demo account with synthetic scans, treatments and adherence.
 
 Generates SYNTHETIC images (procedurally drawn hair/scalp texture) purely so the
 UI and pipeline can be exercised end-to-end. These are not real people and carry
 no clinical meaning whatsoever.
 
-Usage (backend venv active, server NOT required â€” talks to the DB directly):
+Usage (backend venv active, server NOT required — talks to the DB directly):
     python -m scripts.seed_demo
 """
 
@@ -48,7 +48,7 @@ def synth_scalp_image(
     the framing metric has something meaningful to compare. `offset` and `zoom`
     shift/scale the subject to simulate a differently-framed capture.
 
-    `scalp_ratio` (0..1) controls how much scalp shows through â€” this is what
+    `scalp_ratio` (0..1) controls how much scalp shows through — this is what
     makes successive "scans" differ, so the timeline has real signal.
     """
     try:
@@ -158,7 +158,7 @@ def create_scan(db, user, days_ago: int, scalp_ratio: float, seed_base: int) -> 
     db.commit()
 
     if passed < len(HAIR_VIEWS):
-        print(f"  scan {days_ago}d ago: only {passed}/{len(HAIR_VIEWS)} views passed the quality gate â€” not analyzed")
+        print(f"  scan {days_ago}d ago: only {passed}/{len(HAIR_VIEWS)} views passed the quality gate — not analyzed")
         session.status = "rejected"
         db.commit()
         return None
@@ -246,9 +246,13 @@ def main() -> None:
         seed_history_and_shedding(db, user)
 
         # Three scans over ~3 months with slightly increasing scalp visibility.
-        create_scan(db, user, days_ago=84, scalp_ratio=0.30, seed_base=1000)
-        create_scan(db, user, days_ago=42, scalp_ratio=0.35, seed_base=2000)
-        create_scan(db, user, days_ago=3, scalp_ratio=0.33, seed_base=3000)
+        # Skipped when they exist, so this can run on every container start.
+        if db.query(ScanSession).filter(ScanSession.user_id == user.id).count():
+            print("Demo scans already present")
+        else:
+            create_scan(db, user, days_ago=84, scalp_ratio=0.30, seed_base=1000)
+            create_scan(db, user, days_ago=42, scalp_ratio=0.35, seed_base=2000)
+            create_scan(db, user, days_ago=3, scalp_ratio=0.33, seed_base=3000)
 
         if not db.query(Treatment).filter(Treatment.user_id == user.id).count():
             t1 = Treatment(

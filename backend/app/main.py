@@ -43,6 +43,7 @@ def _warm_caches() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    settings.check_production_safety()
     # Dev convenience: create tables. Production uses Alembic migrations.
     if not settings.is_prod:
         init_db()
@@ -104,6 +105,7 @@ def health():
         "evidence": {"documents": index.state.get("documents"), "chunks": index.state.get("chunks"),
                      "embedding": index.state.get("embedding")},
         "redis": get_redis() is not None,
+        "demo_mode": settings.demo_mode,
         "notice": "Image-based observations only. Not a medical diagnosis. Never prescribes.",
     }
 

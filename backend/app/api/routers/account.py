@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.deps import client_ip_hash, get_current_user
 from app.core.audit import record_audit
+from app.core.config import settings
 from app.db.session import get_db
 from app.models.product import Product
 from app.models.scan import Analysis, Observation, ScanImage, ScanSession
@@ -47,6 +48,11 @@ def export_data(user: User = Depends(get_current_user), db: Session = Depends(ge
 @router.delete("")
 def delete_account(request: Request, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Hard delete: purge images from storage, then all rows. Writes a final audit entry."""
+    if settings.demo_mode and user.email == settings.demo_email:
+        raise HTTPException(
+            status.HTTP_403_FORBIDDEN,
+            detail="The shared demo account can't be deleted. Create your own account to try deletion.",
+        )
     # 1) Purge images from object storage.
     for s in db.scalars(select(ScanSession).where(ScanSession.user_id == user.id)).all():
         for img in db.scalars(select(ScanImage).where(ScanImage.session_id == s.id)).all():

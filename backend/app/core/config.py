@@ -4,6 +4,8 @@ from functools import lru_cache
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+DEV_SECRET = "dev-insecure-secret-change-me-please-32chars"
+
 
 class Settings(BaseSettings):
     """Central configuration. All values overridable via environment / .env.
@@ -15,7 +17,7 @@ class Settings(BaseSettings):
 
     # App
     hairgpt_env: str = "dev"
-    secret_key: str = "dev-insecure-secret-change-me-please-32chars"
+    secret_key: str = DEV_SECRET
     access_token_ttl_min: int = 30
     refresh_token_ttl_days: int = 14
     cors_origins: str = "http://localhost:3000"
@@ -96,6 +98,11 @@ class Settings(BaseSettings):
     # costs more credibility than it adds surface area. Flip this to expose it.
     enable_skin_domain: bool = False
 
+    # Public demo: one shared account whose credentials are published, so
+    # nobody visiting may destroy it for everyone else.
+    demo_mode: bool = False
+    demo_email: str = "demo@example.com"
+
     @property
     def cors_origin_list(self) -> list[str]:
         return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
@@ -103,6 +110,17 @@ class Settings(BaseSettings):
     @property
     def is_prod(self) -> bool:
         return self.hairgpt_env.lower() in {"prod", "production"}
+
+    def check_production_safety(self) -> None:
+        """Refuse to run in production with the published dev secret: it signs
+        every access token, so anyone reading the source could mint one."""
+        if not self.is_prod:
+            return
+        if self.secret_key == DEV_SECRET or len(self.secret_key) < 32:
+            raise RuntimeError(
+                "SECRET_KEY must be set to a random value of at least 32 characters in production "
+                '(e.g. python -c "import secrets; print(secrets.token_urlsafe(48))").'
+            )
 
 
 @lru_cache
