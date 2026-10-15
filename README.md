@@ -317,12 +317,14 @@ git history.
 
 ## Public demo (free hosting)
 
-The demo runs at no cost: the API as a Docker Space on Hugging Face, the website on Vercel, with
-tests, an image build and deploys on GitHub Actions. The image bakes in the evidence index and both
-models, re-seeds a fresh demo record on every start, and protects the shared demo account. Setup
-takes about ten minutes: see [docs/DEPLOY.md](docs/DEPLOY.md).
+The public demo is the real website in **recorded-demo mode** on Vercel: it replays a snapshot of a
+real run of the API (scans, photos, results, comparisons and cited answers), so it needs no server and
+never sleeps. A banner says it is a recording. **Run the full system** opens the live API, models and
+website in GitHub Codespaces with one click ([`.devcontainer/`](.devcontainer)). Setup, re-recording and
+the optional live-API host are in [docs/DEPLOY.md](docs/DEPLOY.md).
 
-Run the same image locally:
+The API also ships as a container that bakes in the evidence index and both models, re-seeds a fresh
+demo record on every start and protects the shared demo account:
 
 ```bash
 docker build -t hairgpt-api backend

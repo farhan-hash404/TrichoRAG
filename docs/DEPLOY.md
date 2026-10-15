@@ -1,69 +1,88 @@
 # Deploying the public demo (free, no card)
 
-| Part | Host | Cost |
+The public demo is the real website in **recorded-demo mode**, hosted free on Vercel. It ships a snapshot
+of a real run of the HairGPT API and answers the site's own API calls from it, so there is no server to
+pay for, sleep or wake. Reviewers who want the live system open it in GitHub Codespaces with one click.
+
+| What | Where | Cost |
 |---|---|---|
-| API (FastAPI, evidence index, models) | Hugging Face Spaces, Docker, free CPU | £0, no card |
-| Website (Next.js) | Vercel Hobby | £0, no card |
-| Tests, image build, deploys | GitHub Actions | £0 for a public repo |
+| Public demo: website + recorded API responses | Vercel Hobby | £0, no card |
+| Full system on demand: API, models, website | GitHub Codespaces (the reviewer's free quota) | £0 to you |
+| Tests, snapshot checks, Docker image build | GitHub Actions | £0, public repo |
+| Optional always-on live API | Hugging Face Docker Space | needs HF PRO ($9/month) |
 
-The website proxies `/api/v1/*` to the API from its own server, so the browser only ever talks to one
-origin: no CORS setup, and the API host can change without touching client code.
+## What "recorded" means
 
-## What happens automatically
+`backend/scripts/record_snapshot.py` signs in to a running API as the demo user and saves every response
+the website needs into `frontend/public/snapshot/`: the scans and their photos, results, timeline,
+shedding log, treatments, history, doctor reports, all scan comparisons, product suggestions, and answers
+to a set of evidence questions (including a guardrail and an off-topic refusal). Nothing is invented.
 
-- **CI** (`.github/workflows/ci.yml`) on every push: the backend test suite, the website type-check and
-  production build, and a Docker build of the API that is started and smoke-tested (health, demo
-  sign-in, seeded scans, the demo account's delete protection).
-- **Deploy** (`.github/workflows/deploy-api.yml`) after CI passes on `master`: publishes `backend/` as a
-  Docker Space, creating the Space on first run and setting a fresh `SECRET_KEY` on each deploy.
-- **The image** bakes in the schema, the evidence database, the search index and both ONNX models
-  (`scripts/bake_image.py`). On start it only seeds the demo record, dated relative to that day, and
-  serves (`scripts/start.sh`). It refuses to start in production without a real `SECRET_KEY`.
+When the site is built with `NEXT_PUBLIC_DEMO_SNAPSHOT=true`:
 
-## One-time setup (about 10 minutes)
+- every API call is answered from the recording (`frontend/src/lib/snapshot.ts`), with zero network calls
+  to an API;
+- dates are shifted by the recording's age, so "last scan 3 days ago" stays true;
+- a visitor's own edits (logging shedding, ticking a treatment, saving history) work for the visit and
+  stay in the browser;
+- live capture and new questions point to the full system, and a banner says it is a recording.
 
-### 1. Hugging Face: the API
+CI checks the replay logic against the recording (`npm run test:snapshot`) and builds the site in this
+mode on every push.
 
-1. Create a free account at <https://huggingface.co/join>.
-2. **Settings → Access Tokens → Create new token**, type **Write**. Copy it.
-3. In the GitHub repository: **Settings → Secrets and variables → Actions**
-   - **Secrets** tab → `HF_TOKEN` = the token from step 2.
-   - **Variables** tab → `HF_SPACE` = `<your-hf-username>/hairgpt-api`.
-   - Optional **secret** `GEMINI_API_KEY` (free from <https://aistudio.google.com>). Without it the
-     assistant still answers, with verbatim, cited quotes instead of written summaries.
-4. **Actions → Deploy API to Hugging Face Spaces → Run workflow.** (After this it runs by itself
-   whenever CI passes on `master`.)
-5. The first image build takes about ten minutes. Then open
-   `https://<your-hf-username>-hairgpt-api.hf.space/health`: it should say `"status": "ok"` and
-   `"demo_mode": true`.
+## Set up the public demo (5 minutes)
 
-### 2. Vercel: the website
-
-1. Sign up at <https://vercel.com/signup> with GitHub (Hobby plan).
-2. **Add New → Project →** import `HairGpt`.
+1. Sign up at <https://vercel.com/signup> with GitHub (Hobby plan, no card).
+2. **Add New → Project →** import this repository.
 3. **Root Directory:** `frontend` (the framework is detected as Next.js).
-4. **Environment Variables:** `NEXT_PUBLIC_API_BASE` = `https://<your-hf-username>-hairgpt-api.hf.space`
-   (no trailing slash).
-5. **Deploy.** Vercel redeploys on every push to `master`.
+4. **Environment Variables:** `NEXT_PUBLIC_DEMO_SNAPSHOT` = `true`.
+5. **Deploy.** Every push to `master` redeploys. The site's address is your portfolio link.
 
-Open the Vercel URL and choose **Explore the demo record**.
+## Re-record after changing the API
 
-## Behaviour worth knowing
+```bash
+cd backend
+python -m uvicorn app.main:app --port 8000
+```
 
-- **Sleeping.** A free Space sleeps after a couple of days without visitors; the next visit wakes it in
-  under a minute. The sign-in page says so ("Waking the demo server…") rather than timing out.
-- **Resets.** The Space's disk is not persistent: accounts and photos created by visitors disappear on
-  each restart or deploy, and the demo record is re-seeded fresh.
-- **The shared demo account** cannot be deleted (`DEMO_MODE=true` in the image); visitors can still
-  create and delete their own accounts.
-- **`NEXT_PUBLIC_API_BASE`** is read when the website is built: after changing it, redeploy on Vercel.
+In a second terminal (the API must have finished starting):
 
-## Troubleshooting
+```bash
+cd backend
+python -m scripts.record_snapshot --api http://127.0.0.1:8000 --out ../frontend/public/snapshot
+```
 
-| Symptom | Cause and fix |
-|---|---|
-| Deploy workflow skipped | `HF_SPACE` variable not set (it must be a **variable**, not a secret). |
-| Space log: `SECRET_KEY must be set` | The Space has no secret yet: run the deploy workflow once. |
-| Space build fails | Open the Space → **Logs → Build**; the same build runs in CI's `api-image` job. |
-| Website shows "The demo server isn't responding" | Check the Space page; a failed build or a paused Space shows there. |
-| Sign-in works locally but not on Vercel | `NEXT_PUBLIC_API_BASE` missing or wrong; redeploy after fixing it. |
+Record against the full profile (cross-encoder on, the default) so the answers match the benchmarked
+configuration. If `GEMINI_API_KEY` is set, the recorded answers are written by the model and still
+verified; without it they are verbatim, cited quotes. Commit `frontend/public/snapshot/` and push.
+
+## The full system in Codespaces
+
+The repository has a dev container (`.devcontainer/`). **Code → Codespaces → Create codespace** (or the
+banner's "Run the full system" link) installs the API, builds the evidence index, downloads both models,
+seeds the demo record and starts the API and the website. The first start takes a few minutes; the
+website opens on port 3000. Free GitHub accounts include monthly Codespaces hours.
+
+## The API as a container (any host)
+
+```bash
+docker build -t hairgpt-api backend
+```
+
+```bash
+docker run -p 7860:7860 -e SECRET_KEY=change-me-to-a-long-random-string-of-48-characters hairgpt-api
+```
+
+The image bakes in the evidence index and both models, re-seeds a fresh demo record on every start,
+refuses to start in production without a real `SECRET_KEY`, and protects the shared demo account
+(`DEMO_MODE=true`). It needs about 650 MB of RAM with the cross-encoder, about 320 MB without it
+(`RAG_CROSS_ENCODER=false`, which costs about 8 points of top-1 retrieval accuracy). To serve a live site,
+point the website at it with `NEXT_PUBLIC_API_BASE` and leave `NEXT_PUBLIC_DEMO_SNAPSHOT` unset.
+
+## Optional: an always-on live API on Hugging Face
+
+Hugging Face now requires PRO for Docker Spaces; on the free tier the deploy fails with
+`402 Payment Required`. With PRO: add the repository variable `HF_SPACE` (`your-username/space-name`) and
+the secret `HF_TOKEN` (a **Write** token), then run **Actions → Deploy API to Hugging Face Spaces (PRO)**.
+The workflow checks the token, its permissions and the Space name first and reports problems in plain
+words on the run's summary page.

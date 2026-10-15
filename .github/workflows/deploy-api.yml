@@ -1,17 +1,15 @@
-name: Deploy API to Hugging Face Spaces
+name: Deploy API to Hugging Face Spaces (PRO)
 
-# Publishes backend/ as a Docker Space after CI passes on master.
-# One-time setup (repository Settings -> Secrets and variables -> Actions):
+# Optional live API. Hugging Face now requires a PRO subscription to host Docker
+# Spaces (the free tier answers 402 Payment Required), so this runs only when
+# started by hand. The public demo does not need it: it is a recorded snapshot
+# on Vercel (see docs/DEPLOY.md).
+# Setup (repository Settings -> Secrets and variables -> Actions):
 #   variable HF_SPACE   e.g. your-hf-username/hairgpt-api
 #   secret   HF_TOKEN   a Hugging Face access token with "write" permission
 #   secret   GEMINI_API_KEY   optional; without it answers are verbatim, cited quotes
-# Until HF_SPACE is set this workflow does nothing.
 
 on:
-  workflow_run:
-    workflows: [CI]
-    types: [completed]
-    branches: [master]
   workflow_dispatch:
 
 concurrency:
@@ -20,14 +18,10 @@ concurrency:
 
 jobs:
   deploy:
-    if: >-
-      vars.HF_SPACE != '' &&
-      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    if: vars.HF_SPACE != ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
