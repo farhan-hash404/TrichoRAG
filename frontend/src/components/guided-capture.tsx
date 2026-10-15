@@ -14,6 +14,8 @@ import {
   type HairSymptoms,
   type SkinSymptoms,
 } from "@/components/symptom-check";
+import { PageHeader } from "@/components/page-header";
+import { FULL_SYSTEM_URL, SNAPSHOT_MODE, snapshotImageUrl } from "@/lib/snapshot";
 import { cn, titleize } from "@/lib/utils";
 
 const VIEW_COACHING: Record<string, string> = {
@@ -31,18 +33,79 @@ const VIEW_COACHING: Record<string, string> = {
 
 type Captured = Record<string, QualityReport>;
 
-export function GuidedCapture({
-  domain,
+type CaptureProps = {
+  domain: "hair" | "skin";
   /** Symptom answers already collected upstream (the assessment flow asks them
    *  before capture). When provided, the in-component check is skipped so the
    *  user is never asked the same safety questions twice. */
-  presetSymptoms,
-  onComplete,
-}: {
-  domain: "hair" | "skin";
   presetSymptoms?: HairSymptoms;
   onComplete?: (sessionId: string) => void;
-}) {
+};
+
+export function GuidedCapture(props: CaptureProps) {
+  return SNAPSHOT_MODE ? <RecordedCapture standalone={!props.onComplete} /> : <LiveCapture {...props} />;
+}
+
+/* The recorded demo can't run the camera or the analysis, so it shows the photos
+   from the recorded scan and points to where both run for real. Inside the
+   assessment the step supplies the heading; on its own page it needs one. */
+function RecordedCapture({ standalone }: { standalone: boolean }) {
+  const [scan, setScan] = React.useState<{ id: string; views: string[] } | null>(null);
+
+  React.useEffect(() => {
+    api.captureReference("hair").then(({ reference }) => {
+      if (reference) setScan({ id: reference.session_id, views: reference.views });
+    });
+  }, []);
+
+  return (
+    <div className="space-y-6">
+      {standalone && (
+        <PageHeader
+          eyebrow="Guided capture"
+          title="Seven views, each quality-checked."
+          dek="Focus, light and framing are checked on every photo before anything is measured."
+        />
+      )}
+      <div className="border-l-2 border-ink bg-surface px-4 py-3 text-sm leading-relaxed">
+        <p className="font-medium">Live capture isn&apos;t part of the recorded demo.</p>
+        <p className="mt-1 text-ink-soft">
+          These are the seven photos from the recorded scan, each passed through the quality gate before analysis. In
+          the full system the camera guides each view and checks focus, light and framing as you shoot.
+        </p>
+      </div>
+      {scan && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {scan.views.map((view, i) => (
+            <figure key={view} className="crop-marks">
+              <img
+                src={snapshotImageUrl(scan.id, view)}
+                alt={`Recorded scan, ${titleize(view)} view`}
+                className="aspect-square w-full border border-rule object-cover"
+                loading="lazy"
+              />
+              <figcaption className="caption mt-1.5">
+                {String(i + 1).padStart(2, "0")} · {titleize(view)}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+      <div className="flex flex-wrap gap-2 border-t border-ink pt-4">
+        {scan && (
+          <a href={`/scan/${scan.id}/result`} className={buttonVariants()}>
+            See the recorded result
+          </a>
+        )}
+        <a href={FULL_SYSTEM_URL} target="_blank" rel="noopener noreferrer" className={buttonVariants({ variant: "outline" })}>
+          Run the full system ↗
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function LiveCapture({ domain, presetSymptoms, onComplete }: CaptureProps) {
   const router = useRouter();
   const [sessionId, setSessionId] = React.useState<string | null>(null);
   const [views, setViews] = React.useState<string[]>([]);

@@ -4,6 +4,7 @@ import * as React from "react";
 import { ShieldCheck } from "lucide-react";
 import { api, clearTokens, getToken } from "@/lib/api";
 import { useServerStatus } from "@/lib/server-status";
+import { SNAPSHOT_MODE } from "@/lib/snapshot";
 import { Button } from "@/components/ui/button";
 import { ReticleMark } from "@/components/wordmark";
 
@@ -109,6 +110,13 @@ function ServerNotice() {
     return (
       <p role="alert" className="mb-4 border-l-2 border-alert bg-alert-wash px-3.5 py-2.5 text-sm text-alert">
         The demo server isn&apos;t responding. Please try again in a few minutes.
+      </p>
+    );
+  }
+  if (SNAPSHOT_MODE) {
+    return (
+      <p className="caption mb-4 border-l-2 border-rule-strong px-3.5 py-1">
+        Recorded demo · open the demo record below. New accounts and live scans run in the full system.
       </p>
     );
   }
@@ -242,15 +250,17 @@ function AuthForm({ onDone }: { onDone: () => void }) {
             </Button>
             <p className="caption mt-2 text-center">3 scans · treatments · 30 days of adherence · no sign-up</p>
 
-            <button
-              onClick={() => {
-                setError(null);
-                setMode(mode === "login" ? "register" : "login");
-              }}
-              className="mt-6 w-full text-center text-sm text-ink-soft underline decoration-rule-strong underline-offset-4 hover:text-ink hover:decoration-ink"
-            >
-              {mode === "login" ? "New here? Create an account" : "Already have an account? Sign in"}
-            </button>
+            {!SNAPSHOT_MODE && (
+              <button
+                onClick={() => {
+                  setError(null);
+                  setMode(mode === "login" ? "register" : "login");
+                }}
+                className="mt-6 w-full text-center text-sm text-ink-soft underline decoration-rule-strong underline-offset-4 hover:text-ink hover:decoration-ink"
+              >
+                {mode === "login" ? "New here? Create an account" : "Already have an account? Sign in"}
+              </button>
+            )}
           </div>
         </div>
         <p className="mt-4 flex items-start gap-2 px-2 text-xs leading-relaxed text-ink-faint">

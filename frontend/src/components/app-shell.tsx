@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity,
+  BookOpen,
   Calendar,
   ChevronDown,
   ClipboardCheck,
@@ -23,17 +24,19 @@ import { Link001 } from "@/components/ui/skiper-ui/skiper40";
 import { TextRoll } from "@/components/ui/skiper-ui/skiper58";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Wordmark } from "@/components/wordmark";
+import { FULL_SYSTEM_URL, SNAPSHOT_MODE, SOURCE_URL } from "@/lib/snapshot";
 import { cn } from "@/lib/utils";
 
 const NAV = [
   { href: "/", label: "Overview", icon: LayoutDashboard },
+  { href: "/ask", label: "Ask", icon: BookOpen },
   { href: "/assessment", label: "Assessment", icon: ClipboardCheck },
   { href: "/shedding", label: "Shedding", icon: Activity },
   { href: "/timeline", label: "Timeline", icon: Calendar },
-  { href: "/compare", label: "Compare", icon: Layers },
 ];
 
 const MORE_NAV = [
+  { href: "/compare", label: "Compare scans", icon: Layers },
   { href: "/history", label: "Your history", icon: History },
   { href: "/treatments", label: "Treatments & regimen", icon: Pill },
   { href: "/products", label: "Products & ingredients", icon: ShoppingBag },
@@ -137,6 +140,28 @@ function MoreMenu({ pathname }: { pathname: string }) {
   );
 }
 
+/* The public demo replays a recording; say so plainly, and point to the real thing. */
+function RecordingBanner() {
+  return (
+    <div className="border-b border-rule bg-marker/30 text-[hsl(30_12%_10%)] print:hidden">
+      <div className="container flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-1.5 text-xs">
+        <p>
+          <span className="font-semibold">Recorded demo.</span> Every screen replays real responses from the HairGPT
+          API; anything you enter stays in this browser.
+        </p>
+        <p className="flex gap-4 font-medium">
+          <a href={FULL_SYSTEM_URL} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:no-underline">
+            Run the full system ↗
+          </a>
+          <a href={SOURCE_URL} target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:no-underline">
+            Source ↗
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function Colophon() {
   return (
     <footer className="border-t border-rule print:hidden">
@@ -166,6 +191,11 @@ function Colophon() {
                 Skiper UI
               </Link001>
             </li>
+            <li>
+              <Link001 href={SOURCE_URL} className="inline-flex text-ink">
+                Source on GitHub
+              </Link001>
+            </li>
           </ul>
         </div>
       </div>
@@ -178,6 +208,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {SNAPSHOT_MODE && <RecordingBanner />}
       <header className="sticky top-0 z-40 border-b border-rule bg-ground/85 backdrop-blur-md print:hidden">
         <div className="container flex h-16 items-center justify-between gap-4">
           <Wordmark />

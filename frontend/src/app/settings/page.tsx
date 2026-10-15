@@ -7,6 +7,7 @@ import { AuthGate } from "@/components/auth-gate";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/page-header";
 import { ReticleMark } from "@/components/wordmark";
+import { SNAPSHOT_MODE, snapshotExport } from "@/lib/snapshot";
 
 const CONSENT_LABELS: Record<string, string> = {
   storage: "Store my photos securely (encrypted)",
@@ -34,6 +35,7 @@ function Settings() {
   const [me, setMe] = React.useState<any>(null);
   const [busy, setBusy] = React.useState(false);
   const [confirmText, setConfirmText] = React.useState("");
+  const [deleteError, setDeleteError] = React.useState<string | null>(null);
 
   const load = React.useCallback(async () => setMe(await api.me()), []);
   React.useEffect(() => {
@@ -48,11 +50,17 @@ function Settings() {
   }
 
   async function exportData() {
-    const res = await fetch("/api/v1/account/export", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${localStorage.getItem("hairgpt.access")}` },
-    });
-    const blob = new Blob([JSON.stringify(await res.json(), null, 2)], { type: "application/json" });
+    let data: unknown;
+    if (SNAPSHOT_MODE) {
+      data = await snapshotExport();
+    } else {
+      const res = await fetch("/api/v1/account/export", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("hairgpt.access")}` },
+      });
+      data = await res.json();
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -63,10 +71,18 @@ function Settings() {
 
   async function deleteAccount() {
     if (confirmText !== "DELETE") return;
-    await fetch("/api/v1/account", {
+    setDeleteError(null);
+    const res = await fetch("/api/v1/account", {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("hairgpt.access")}` },
     });
+    // Only sign out once the server confirms; a refusal (e.g. the shared demo
+    // account) must not look like a deletion.
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      setDeleteError(typeof body?.detail === "string" ? body.detail : `Deletion failed (${res.status}).`);
+      return;
+    }
     clearTokens();
     window.location.href = "/";
   }
@@ -161,18 +177,29 @@ function Settings() {
           Permanently deletes your account, scans, images, observations and treatments. This cannot be undone. Type{" "}
           <code className="readout rounded-sm border border-rule-strong bg-surface px-1">DELETE</code> to confirm.
         </p>
-        <div className="mt-4 flex flex-wrap items-center gap-3">
-          <input
-            value={confirmText}
-            onChange={(e) => setConfirmText(e.target.value)}
-            aria-label="Type DELETE to confirm"
-            className="readout w-40 rounded border border-rule-strong bg-surface px-3.5 py-2.5 text-sm focus:border-alert focus:outline-none focus:ring-2 focus:ring-alert/30"
-            placeholder="DELETE"
-          />
-          <Button variant="alert" disabled={confirmText !== "DELETE"} onClick={deleteAccount}>
-            <Trash2 className="h-4 w-4" /> Permanently delete my account
-          </Button>
-        </div>
+        {SNAPSHOT_MODE ? (
+          <p className="mt-4 text-sm font-medium text-ink">
+            Not available in the recorded demo: the demo record is shared, and nothing you do here leaves this browser.
+          </p>
+        ) : (
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <input
+              value={confirmText}
+              onChange={(e) => setConfirmText(e.target.value)}
+              aria-label="Type DELETE to confirm"
+              className="readout w-40 rounded border border-rule-strong bg-surface px-3.5 py-2.5 text-sm focus:border-alert focus:outline-none focus:ring-2 focus:ring-alert/30"
+              placeholder="DELETE"
+            />
+            <Button variant="alert" disabled={confirmText !== "DELETE"} onClick={deleteAccount}>
+              <Trash2 className="h-4 w-4" /> Permanently delete my account
+            </Button>
+          </div>
+        )}
+        {deleteError && (
+          <p role="alert" className="mt-3 text-sm font-medium text-alert">
+            {deleteError}
+          </p>
+        )}
       </section>
     </div>
   );

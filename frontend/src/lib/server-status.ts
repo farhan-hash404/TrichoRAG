@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { SNAPSHOT_MODE } from "@/lib/snapshot";
+
 export type ServerStatus = {
   state: "checking" | "waking" | "ready" | "unreachable";
   /** The API is the public demo: a shared demo record, data wiped on restart. */
@@ -16,9 +18,12 @@ const GIVE_UP_MS = 150_000;
  * normal API calls, so the sign-in page says so instead of failing silently.
  */
 export function useServerStatus(): ServerStatus {
-  const [status, setStatus] = React.useState<ServerStatus>({ state: "checking", demo: false });
+  const [status, setStatus] = React.useState<ServerStatus>(
+    SNAPSHOT_MODE ? { state: "ready", demo: true } : { state: "checking", demo: false }
+  );
 
   React.useEffect(() => {
+    if (SNAPSHOT_MODE) return; // the recorded demo has no server to wake
     let cancelled = false;
     const started = Date.now();
 

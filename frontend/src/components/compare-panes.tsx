@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { getToken } from "@/lib/api";
+import { SNAPSHOT_MODE, snapshotImageUrl } from "@/lib/snapshot";
 import { cn, titleize } from "@/lib/utils";
 
 /** Fetch a protected image as an object URL (the API needs a bearer token, so a
@@ -13,6 +14,10 @@ function useAuthedImage(sessionId: string | null, view: string | null) {
 
   React.useEffect(() => {
     if (!sessionId || !view) return;
+    if (SNAPSHOT_MODE) {
+      setUrl(snapshotImageUrl(sessionId, view)); // recorded photos are plain static files
+      return;
+    }
     let revoked: string | null = null;
     let cancelled = false;
     (async () => {

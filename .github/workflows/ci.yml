@@ -30,7 +30,7 @@ jobs:
           MLFLOW_DISABLE_AGENT_HINT: "1"
 
   frontend:
-    name: Website type-check and build
+    name: Website type-check, snapshot test and build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -44,7 +44,12 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run build
+      - name: The recorded demo behaves like the API it replays
+        run: npm run test:snapshot
+      - name: Build the public demo (recorded-demo mode, as Vercel builds it)
+        run: npm run build
+        env:
+          NEXT_PUBLIC_DEMO_SNAPSHOT: "true"
 
   api-image:
     name: API image builds and serves

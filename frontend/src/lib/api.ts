@@ -1,4 +1,7 @@
-/** Typed client for the HairGPT API. Tokens live in memory + localStorage. */
+/** Typed client for the HairGPT API. Tokens live in memory + localStorage.
+ *  In recorded-demo mode every call is answered from the snapshot instead. */
+
+import { SNAPSHOT_MODE, SnapshotError, snapshotRequest } from "@/lib/snapshot";
 
 export type Confidence = { value: number; basis: string; method: string };
 
@@ -161,6 +164,14 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
+  if (SNAPSHOT_MODE) {
+    try {
+      return await snapshotRequest<T>(path, init);
+    } catch (e) {
+      if (e instanceof SnapshotError) throw new ApiError(e.status, e.detail);
+      throw e;
+    }
+  }
   const token = getToken();
   const headers = new Headers(init.headers);
   if (token) headers.set("Authorization", `Bearer ${token}`);
@@ -257,6 +268,45 @@ export const api = {
   logShedding: (body: Partial<SheddingEntry>) =>
     request<SheddingEntry>("/shedding", { method: "POST", body: JSON.stringify(body) }),
   sheddingTrend: (windowDays = 60) => request<SheddingTrend>(`/shedding/trend?window_days=${windowDays}`),
+
+  // Evidence Q&A
+  ask: (question: string) => request<QAResult>("/qa/ask", { method: "POST", body: JSON.stringify({ question }) }),
+};
+
+export type QACitation = {
+  n: number;
+  title: string;
+  section: string;
+  url: string;
+  publisher: string;
+  source: string;
+  evidence_grade: string;
+  license: string;
+  attribution: string;
+  quote: string;
+};
+
+export type QAResult = {
+  question: string;
+  answer: string;
+  mode: "llm" | "extractive" | "guardrail" | "abstain" | "withheld";
+  model: string;
+  abstained: boolean;
+  guardrail: { allowed: boolean; flags: string[]; message: string; notes: string[] } | null;
+  audit: {
+    passed: boolean;
+    support_ratio: number;
+    fabricated_citations: number[];
+    unsupported: string[];
+    uncited_claims: string[];
+    unmatched_numbers: string[];
+    unmatched_terms: string[];
+    policy_violations: string[];
+  } | null;
+  citations: QACitation[];
+  trace: string[];
+  cached: boolean;
+  latency_ms: number;
 };
 
 export type ClinicalHistory = {
