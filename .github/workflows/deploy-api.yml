@@ -1,0 +1,81 @@
+name: Deploy API to Hugging Face Spaces
+
+# Publishes backend/ as a Docker Space after CI passes on master.
+# One-time setup (repository Settings -> Secrets and variables -> Actions):
+#   variable HF_SPACE   e.g. your-hf-username/hairgpt-api
+#   secret   HF_TOKEN   a Hugging Face access token with "write" permission
+#   secret   GEMINI_API_KEY   optional; without it answers are verbatim, cited quotes
+# Until HF_SPACE is set this workflow does nothing.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-api
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: >-
+      vars.HF_SPACE != '' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install "huggingface_hub>=1.0"
+
+      - name: Assemble the Space
+        run: |
+          mkdir space
+          git archive HEAD backend | tar -x --strip-components=1 -C space
+          {
+            echo "---"
+            echo "title: HairGPT API"
+            echo "emoji: 🔬"
+            echo "colorFrom: green"
+            echo "colorTo: yellow"
+            echo "sdk: docker"
+            echo "app_port: 7860"
+            echo "pinned: false"
+            echo "short_description: Evidence-grounded hair & scalp observations (demo API)"
+            echo "---"
+            echo
+            echo "Backend of [HairGPT](https://github.com/${{ github.repository }}). Built from commit \`$(git rev-parse --short HEAD)\`."
+            echo "Observations, not diagnoses. Health check: \`/health\` · API docs: \`/docs\`."
+          } > space/README.md
+
+      - name: Upload and configure
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, secrets, subprocess
+          from huggingface_hub import HfApi
+
+          api = HfApi(token=os.environ["HF_TOKEN"])
+          space = os.environ["HF_SPACE"]
+          api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
+          # A fresh signing key per deploy: the demo has no long-lived sessions to keep.
+          api.add_space_secret(space, "SECRET_KEY", secrets.token_urlsafe(48))
+          if os.environ.get("GEMINI_API_KEY"):
+              api.add_space_secret(space, "GEMINI_API_KEY", os.environ["GEMINI_API_KEY"])
+          commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
+          api.upload_folder(
+              folder_path="space", repo_id=space, repo_type="space",
+              commit_message=f"Deploy {commit}", delete_patterns=["*"],
+          )
+          owner, name = space.split("/")
+          print(f"Deployed: https://huggingface.co/spaces/{space}")
+          print(f"API base: https://{owner.lower()}-{name.lower().replace('_', '-')}.hf.space")
+          PY

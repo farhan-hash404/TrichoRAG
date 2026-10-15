@@ -1,0 +1,20 @@
+# Local state never belongs in the image: it holds secrets, user data or caches.
+.env
+.env.*
+!.env.example
+.venv/
+**/__pycache__/
+.pytest_cache/
+*.db
+*.db-journal
+*.sqlite3
+data/chroma/
+data/*.sqlite
+data/*.sqlite-*
+data/corpus/raw/
+storage/
+models/*
+!models/manifest.example.json
+mlruns/
+mlartifacts/
+evaluation/test_images/

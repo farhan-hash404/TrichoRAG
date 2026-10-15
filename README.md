@@ -315,7 +315,28 @@ git history.
 
 ---
 
+## Public demo (free hosting)
+
+The demo runs at no cost: the API as a Docker Space on Hugging Face, the website on Vercel, with
+tests, an image build and deploys on GitHub Actions. The image bakes in the evidence index and both
+models, re-seeds a fresh demo record on every start, and protects the shared demo account. Setup
+takes about ten minutes: see [docs/DEPLOY.md](docs/DEPLOY.md).
+
+Run the same image locally:
+
+```bash
+docker build -t hairgpt-api backend
+```
+
+```bash
+docker run -p 7860:7860 -e SECRET_KEY=change-me-to-a-long-random-string-of-48-characters hairgpt-api
+```
+
+---
+
 ## Production deployment
+
+The demo above is not a production deployment. A real one needs the following.
 
 **1. Secrets and configuration**
 Set `HAIRGPT_ENV=prod`, a strong random `SECRET_KEY`, and an explicit `IMAGE_ENCRYPTION_KEY` from a secret manager. In `prod` the app does *not* auto-create tables or auto-seed — run migrations and ingestion deliberately.
