@@ -60,22 +60,55 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python - <<'PY'
-          import os, secrets, subprocess
+          import os, re, secrets, subprocess, sys
           from huggingface_hub import HfApi
+          from huggingface_hub.errors import HfHubHTTPError
 
-          api = HfApi(token=os.environ["HF_TOKEN"])
-          space = os.environ["HF_SPACE"]
-          api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True)
+          # Failures surface as annotations on the run's summary page, in words,
+          # instead of a bare "exit code 1" behind an admin-only log.
+          def fail(title, message):
+              print(f"::error title={title}::{message}")
+              sys.exit(1)
+
+          def hf(title, call):
+              try:
+                  return call()
+              except HfHubHTTPError as e:
+                  code = e.response.status_code if e.response is not None else "?"
+                  fail(title, f"Hugging Face answered {code}: {str(e).splitlines()[0][:300]}")
+
+          token = os.environ.get("HF_TOKEN", "").strip()
+          space = os.environ.get("HF_SPACE", "").strip()
+          if not token:
+              fail("HF_TOKEN missing", "Add a Hugging Face Write token as the repository secret HF_TOKEN.")
+          if not re.fullmatch(r"[A-Za-z0-9][\w.-]*/[A-Za-z0-9][\w.-]*", space):
+              fail("HF_SPACE malformed", f"HF_SPACE must be your-hf-username/space-name (e.g. alice/hairgpt-api), got '{space}'.")
+
+          api = HfApi(token=token)
+          me = hf("HF_TOKEN rejected", api.whoami)
+          role = ((me.get("auth") or {}).get("accessToken") or {}).get("role")
+          if role == "read":
+              fail("HF_TOKEN is read-only", "This is a Read token. Create a token of type Write and replace the HF_TOKEN secret.")
+          owner, name = space.split("/")
+          namespaces = {me["name"], *(org["name"] for org in me.get("orgs", []))}
+          if owner not in namespaces:
+              fail("HF_SPACE under another account",
+                   f"The token belongs to '{me['name']}' but HF_SPACE points at '{owner}'. Use {me['name']}/{name}.")
+          print(f"Signed in to Hugging Face as {me['name']} (token: {role})")
+
+          hf("Could not create the Space",
+             lambda: api.create_repo(space, repo_type="space", space_sdk="docker", exist_ok=True))
           # A fresh signing key per deploy: the demo has no long-lived sessions to keep.
-          api.add_space_secret(space, "SECRET_KEY", secrets.token_urlsafe(48))
+          hf("Could not set the Space's SECRET_KEY",
+             lambda: api.add_space_secret(space, "SECRET_KEY", secrets.token_urlsafe(48)))
           if os.environ.get("GEMINI_API_KEY"):
-              api.add_space_secret(space, "GEMINI_API_KEY", os.environ["GEMINI_API_KEY"])
+              hf("Could not set GEMINI_API_KEY",
+                 lambda: api.add_space_secret(space, "GEMINI_API_KEY", os.environ["GEMINI_API_KEY"]))
           commit = subprocess.check_output(["git", "rev-parse", "--short", "HEAD"], text=True).strip()
-          api.upload_folder(
+          hf("Could not upload to the Space", lambda: api.upload_folder(
               folder_path="space", repo_id=space, repo_type="space",
               commit_message=f"Deploy {commit}", delete_patterns=["*"],
-          )
-          owner, name = space.split("/")
+          ))
           print(f"Deployed: https://huggingface.co/spaces/{space}")
           print(f"API base: https://{owner.lower()}-{name.lower().replace('_', '-')}.hf.space")
           PY
