@@ -212,7 +212,7 @@ async def upload_image(
     q.is_mock = report.is_mock
 
     # Longitudinal framing: compare against the previous completed scan so repeat
-    # captures stay comparable. A mismatch WARNS but never blocks â€” refusing a
+    # captures stay comparable. A mismatch WARNS but never blocks — refusing a
     # scan is worse than accepting a flagged one, and the score gates comparison
     # confidence downstream instead.
     reference = find_reference_session(db, user.id, s.domain, exclude_session_id=s.id)
@@ -288,7 +288,7 @@ def analyze(
     """Run the LangGraph analysis pipeline.
 
     An optional self-reported symptom report feeds the deterministic safety
-    engine â€” several high-severity red flags cannot be detected from images
+    engine — several high-severity red flags cannot be detected from images
     alone, so a user's "yes" is enough to force a referral.
 
     ``interactive=true`` enables human-in-the-loop: a low-confidence reading
@@ -346,7 +346,7 @@ def analysis_resume(
     user: User = Depends(require_analysis_consent),
     db: Session = Depends(get_db),
 ):
-    """Answer a paused analysis. Resumes from its checkpoint â€” the computer
+    """Answer a paused analysis. Resumes from its checkpoint — the computer
     vision is not re-run."""
     s = _get_session(db, user, session_id)
     try:
@@ -455,7 +455,7 @@ def doctor_report(session_id: uuid.UUID, user: User = Depends(get_current_user),
         observations.append(payload)
 
     # Self-reported history is often the most clinically useful part of this
-    # report â€” it is the context no photo can supply, and unlike the CV output
+    # report — it is the context no photo can supply, and unlike the CV output
     # its value does not depend on model quality.
     history_row = db.scalar(select(ClinicalHistory).where(ClinicalHistory.user_id == user.id))
     history_payload = None

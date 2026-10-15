@@ -10,6 +10,9 @@ backend/storage/
 backend/*.db
 backend/*.db-journal
 backend/*.sqlite3
+# LangGraph checkpoints: runtime state of paused analyses (plus WAL/SHM files)
+backend/data/*.sqlite
+backend/data/*.sqlite-*
 
 # --- ML model weights (never commit) ---
 # Anchored on purpose. A bare "models/" also matched backend/app/models/ — the
